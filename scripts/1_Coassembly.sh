@@ -54,7 +54,7 @@ cd $IN_DIR
 megahit -1 $PAIR1 -2 $PAIR2 -o $ASS_DIR
 
 mv $ASS_DIR/final.contigs.fa $SAMPLE_DIR/${SAMPLE_ID}_CoA.fasta
-#rm -r $ASS_DIR
+rm -r $ASS_DIR
 
 # run Quast
 cd $GEN_DIR

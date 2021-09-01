@@ -47,33 +47,47 @@ IFS=','
 for i in $PAIR1 
 do
 	cp $i $READ_DIR/
+	gunzip $READ_DIR/$i
+	mv $READ_DIR/${i%%.gz} "$READ_DIR/${i%%_R1_val_1.fq.gz}_1.fastq"
 done
 
 for i in $PAIR2
 do
         cp $i $READ_DIR/
+	gunzip $READ_DIR/$i
+        mv $READ_DIR/${i%%.gz} "$READ_DIR/${i%%_R2_val_2.fq.gz}_2.fastq"
 done
 
 # Set previous output files
 ASS_FILE="$SAMPLE_DIR/${SAMPLE_ID}_CoA.fasta"
 
 # run binning
-#metawrap binning -o $OUT_DIR -t 40 -a $ASS_FILE --metabat2 --maxbin2 --concoct ${READ_DIR}*
+metawrap binning -o $SAMPLE_DIR -t 40 -a $ASS_FILE --metabat2 --maxbin2 --concoct ${READ_DIR}/*.fastq
 
 # run bin refinement
-#metawrap bin_refinement -o $OUT_DIR/bins_refined -t 40 -A $OUT_DIR/metabat2_bins/ -B $OUT_DIR/maxbin2_bins/ -C $OUT_DIR/concoct_bins/ -c 70 -x 5
-
-# run abundance calculation of bins
-#metawrap quant_bins -b $OUT_DIR/bins_refined/metawrap_70_5_bins -o $OUT_DIR/bins_refined/quant_bin -a $ASS_FILE ${READ_DIR}*
+metawrap bin_refinement -o $SAMPLE_DIR/bins_refined -t 40 -A $SAMPLE_DIR/metabat2_bins/ -B $SAMPLE_DIR/maxbin2_bins/ -C $SAMPLE_DIR/concoct_bins/ -c 70 -x 5
 
 # reassemble bins
-#cat ${READ_DIR}*_1.fastq > ${READ_DIR}cat_1.fastq
-#cat ${READ_DIR}*_2.fastq > ${READ_DIR}cat_2.fastq
-#metawrap reassemble_bins -o /scratch/project_2004512/reas_bin -1 ${READ_DIR}cat_1.fastq -2 ${READ_DIR}cat_2.fastq -t 40 -m 800 -c 70 -x 5 -b $OUT_DIR/bins_refined/metawrap_70_5_bins
+cat ${READ_DIR}/*_1.fastq >> ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq
+cat ${READ_DIR}/*_2.fastq >> ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq
 
-#mv /scratch/project_2004512/reas_bin $OUT_DIR/bins_reassembly_70.5
+metawrap reassemble_bins -o /scratch/project_2004512/$SAMPLE_ID -1 ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq -2 ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq -t 40 -m 800 -c 70 -x 5 -b $SAMPLE_DIR/bins_refined/metawrap_70_5_bins
+
+mv /scratch/project_2004512/$SAMPLE_ID $SAMPLE_DIR/bins_reassembly_70.5
+
+rm ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq
+rm ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq
+
+########################
+# run abundance calculation of bins
+metawrap quant_bins -b $SAMPLE_DIR/bins_reassembly_70.5/reassembled_bins -o $SAMPLE_DIR/bins_reassembly_70.5/quant_bin -a $ASS_FILE ${READ_DIR}/*
 
 # Clean the data to keep only needed files
+rm -r $SAMPLE_DIR/concoct_bins
+rm -r $SAMPLE_DIR/maxbin2_bins
+rm -r $SAMPLE_DIR/metabat2_bins
+rm -r $SAMPLE_DIR/temp_reads
+rm -r $SAMPLE_DIR/work_files
 
 # echo for log
 echo "job finished;"; date
