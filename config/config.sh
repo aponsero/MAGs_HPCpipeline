@@ -3,7 +3,7 @@
 CONDA="/scratch/project_2004512/tools/miniconda3"
 # INPUT LIST and  DIRECTORY
 IN_LIST="/scratch/project_2004512/Emilia/scripts/3_MAGs_Pipeline/config/list.txt"
-IN_DIR="/scratch/project_2004512/Emilia/scripts/test_data"
+IN_DIR="/scratch/project_2001503/alise/temp_files/MAGs_dataset/dataset"
 # OUTPUT DIRECTORY
 OUT_DIR="/scratch/project_2004512/Emilia/experiments/3_Complete_MAGs_collection"
 # location install QUAST
