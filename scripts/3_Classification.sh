@@ -3,8 +3,8 @@
 #SBATCH --account=project_2004512
 #SBATCH --output=errout/outputr%j.txt
 #SBATCH --error=errout/errors_%j.txt
-#SBATCH --partition=small
-#SBATCH --time=72:00:00
+#SBATCH --partition=longrun
+#SBATCH --time=150:00:00
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=40
