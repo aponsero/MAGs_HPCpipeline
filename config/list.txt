@@ -1,3 +1,0 @@
-Perhe192_M;WGS_Perhe192_M_NovaSeq2.1_host_removed_R1_val_1.fq.gz;WGS_Perhe192_M_NovaSeq2.1_host_removed_R2_val_2.fq.gz
-Perhe25_M;WGS_Perhe25_M_NovaSeq2.1_host_removed_R1_val_1.fq.gz;WGS_Perhe25_M_NovaSeq2.1_host_removed_R2_val_2.fq.gz
-Perhe342_M;WGS_Perhe342_M_NovaSeq2.1_host_removed_R1_val_1.fq.gz;WGS_Perhe342_M_NovaSeq2.1_host_removed_R2_val_2.fq.gz
