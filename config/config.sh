@@ -3,9 +3,9 @@
 CONDA="/scratch/project_2004512/tools/miniconda3"
 # INPUT LIST and  DIRECTORY
 IN_LIST="/scratch/project_2004512/Emilia/scripts/3_MAGs_Pipeline/config/list.txt"
-IN_DIR="/scratch/project_2001503/alise/temp_files/MAGs_dataset/dataset"
+IN_DIR="/scratch/project_2004512/Emilia/experiments/parental_MAGs/"
 # OUTPUT DIRECTORY
-OUT_DIR="/scratch/project_2004512/Emilia/experiments/3_Complete_MAGs_collection"
+OUT_DIR="/scratch/project_2004512/Emilia/experiments/parental_MAGs/"
 # location install QUAST
 QUAST="/scratch/project_2004512/tools/quast"
 # reference genomes directory

@@ -4,10 +4,10 @@
 #SBATCH --output=errout/outputr%j.txt
 #SBATCH --error=errout/errors_%j.txt
 #SBATCH --partition=small
-#SBATCH --time=01:00:00
+#SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=20
+#SBATCH --cpus-per-task=40
 #SBATCH --mem-per-cpu=1000
 
 
@@ -37,26 +37,26 @@ echo $PAIR2
 # create output directories
 SAMPLE_DIR="$OUT_DIR/$SAMPLE_ID"
 READ_DIR="$OUT_DIR/$SAMPLE_ID/temp_reads"
-mkdir $READ_DIR
+#mkdir $READ_DIR
 
 
 # copy the needed read files for mapping
 cd $IN_DIR
 IFS=',' 
 
-for i in $PAIR1 
-do
-	cp $i $READ_DIR/
-	gunzip $READ_DIR/$i
-	mv $READ_DIR/${i%%.gz} "$READ_DIR/${i%%_R1_val_1.fq.gz}_1.fastq"
-done
+#for i in $PAIR1 
+#do
+#	cp $i $READ_DIR/
+#	gunzip $READ_DIR/$i
+#	mv $READ_DIR/${i%%.gz} "$READ_DIR/${i%%_R1_val_1.fq.gz}_1.fastq"
+#done
 
-for i in $PAIR2
-do
-        cp $i $READ_DIR/
-	gunzip $READ_DIR/$i
-        mv $READ_DIR/${i%%.gz} "$READ_DIR/${i%%_R2_val_2.fq.gz}_2.fastq"
-done
+#for i in $PAIR2
+#do
+#        cp $i $READ_DIR/
+#	gunzip $READ_DIR/$i
+#        mv $READ_DIR/${i%%.gz} "$READ_DIR/${i%%_R2_val_2.fq.gz}_2.fastq"
+#done
 
 # Set previous output files
 ASS_FILE="$SAMPLE_DIR/${SAMPLE_ID}_CoA.fasta"
@@ -68,33 +68,34 @@ ASS_FILE="$SAMPLE_DIR/${SAMPLE_ID}_CoA.fasta"
 #metawrap bin_refinement -o $SAMPLE_DIR/bins_refined -t 40 -A $SAMPLE_DIR/metabat2_bins/ -B $SAMPLE_DIR/maxbin2_bins/ -C $SAMPLE_DIR/concoct_bins/ -c 70 -x 5
 
 # reassemble bins
-#cat ${READ_DIR}/*_1.fastq >> ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq
-#cat ${READ_DIR}/*_2.fastq >> ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq
+cat ${READ_DIR}/*_1.fastq >> ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq
+cat ${READ_DIR}/*_2.fastq >> ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq
 
-#metawrap reassemble_bins -o /scratch/project_2004512/$SAMPLE_ID -1 ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq -2 ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq -t 40 -m 800 -c 70 -x 5 -b $SAMPLE_DIR/bins_refined/metawrap_70_5_bins
+metawrap reassemble_bins -o /scratch/project_2004512/$SAMPLE_ID -1 ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq -2 ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq -t 40 -m 800 -c 70 -x 5 -b $SAMPLE_DIR/bins_refined/metawrap_70_5_bins
 
-#mv /scratch/project_2004512/$SAMPLE_ID $SAMPLE_DIR/bins_reassembly_70.5
+mv /scratch/project_2004512/$SAMPLE_ID $SAMPLE_DIR/bins_reassembly_70.5
 
-#rm ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq
-#rm ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq
+rm ${READ_DIR}/${SAMPLE_ID}_cat_1.fastq
+rm ${READ_DIR}/${SAMPLE_ID}_cat_2.fastq
 
 ########################
 # run abundance calculation of bins
 metawrap quant_bins -b $SAMPLE_DIR/bins_refined/metawrap_70_5_bins -o $SAMPLE_DIR/bins_refined/quant_bin -a $ASS_FILE ${READ_DIR}/*
 
 # Clean the data to keep only needed files
-#rm -r $SAMPLE_DIR/bins_refined/concoct_bins
-#rm -r $SAMPLE_DIR/bins_refined/maxbin2_bins
-#rm -r $SAMPLE_DIR/bins_refined/metabat2_bins
-#rm -r $SAMPLE_DIR/bins_refined/work_files
+rm -r $SAMPLE_DIR/bins_refined/concoct_bins
+rm -r $SAMPLE_DIR/bins_refined/maxbin2_bins
+rm -r $SAMPLE_DIR/bins_refined/metabat2_bins
+rm -r $SAMPLE_DIR/bins_refined/work_files
 rm -r $SAMPLE_DIR/temp_reads
-#rm -r $SAMPLE_DIR/work_files
-#rm -r $SAMPLE_DIR/bins_reassembly_70.5/work_files
-#rm -r $SAMPLE_DIR/bins_reassembly_70.5/original_bins
+rm -r $SAMPLE_DIR/work_files
+rm -r $SAMPLE_DIR/bins_reassembly_70.5/work_files
+rm -r $SAMPLE_DIR/bins_reassembly_70.5/original_bins
+rm -r $SAMPLE_DIR/bins_reassembly_70.5/reassembled_bins.checkm
 rm -r $SAMPLE_DIR/bins_refined/quant_bin/assembly_index/
-#rm -r $SAMPLE_DIR/concoct_bins
-#rm -r $SAMPLE_DIR/maxbin2_bins
-#rm -r $SAMPLE_DIR/metabat2_bins
+rm -r $SAMPLE_DIR/concoct_bins
+rm -r $SAMPLE_DIR/maxbin2_bins
+rm -r $SAMPLE_DIR/metabat2_bins
 
 
 # echo for log
