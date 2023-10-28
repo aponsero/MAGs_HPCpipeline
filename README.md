@@ -12,16 +12,16 @@ This pipeline requires a number of tools to function :
 
 ### Conda environment
 Create the assembly and metawrap environment
-'''
+```bash
 conda env create -f config/assembly_conda.yml
 conda env create -f config/metawrap_conda.yml 
-'''
+```
 
 ### Databases to download
 
 #### Download the databases for CheckM
 
-'''
+```bash
 cd MY_CHECKM_FOLDER
 wget https://data.ace.uq.edu.au/public/CheckM_databases/checkm_data_2015_01_16.tar.gz
 tar -xvf *.tar.gz
@@ -29,7 +29,7 @@ rm *.gz
 
 
 checkm data setRoot /path/to/your/dir/MY_CHECKM_FOLDER
-'''
+```
 
 #### Download the database for Kraken2
 Visit the following page and download the Kraken2 database of interest
@@ -37,7 +37,7 @@ https://github.com/BenLangmead/aws-indexes
 
 #### Download the NCBI database
 
-'''
+```bash
 mkdir NCBI_nt
 cd  NCBI_nt
 wget "ftp://ftp.ncbi.nlm.nih.gov/blast/db/nt_v4.*.tar.gz"
@@ -48,7 +48,7 @@ mkdir NCBI_tax
 cd NCBI_tax
 wget ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
 tar -xvf taxdump.tar.gz
-'''
+```
 
 ### Install metawrap
 - Clone the metawrap repository: git clone https://github.com/bxlab/metaWRAP.git
@@ -60,7 +60,34 @@ tar -xvf taxdump.tar.gz
 ### Other tools
 
 Install QUAST from the source git repository:
-'''
+```bash
 git clone git@github.com:ablab/quast.git
-'''
- 
+```
+
+## Run the pipeline
+
+Open the scripts files and add the correct project ID for billing. Submit the jobs as follows:
+
+### Generate (co-)assemblies 
+
+The first step will assemble or co-assemble the samples: 
+
+```bash
+./1_Run_Assembly.sh
+```
+
+### Generate the MAGs
+
+The second step will assemble MAGs: 
+
+```bash
+./2_run_MAGs.sh
+```
+
+ ### First taxonomic classification
+
+The last step will produce a general taxonomic classification of the MAGs. Better classification can be obtained using GTDB-tk.
+
+```bash
+./3_Run_Classification.sh
+```
